@@ -8,33 +8,50 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Soft pastel color palette for family connection app */
+    --background: 210 40% 98%;
+    --foreground: 220 15% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 15% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 15% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Light blue primary - welcoming and trust */
+    --primary: 200 85% 70%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 200 85% 60%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Light green for positive states */
+    --secondary: 150 60% 75%;
+    --secondary-foreground: 150 60% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Soft purple accent */
+    --accent: 280 45% 80%;
+    --accent-foreground: 280 45% 30%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Warm muted tones */
+    --muted: 210 25% 95%;
+    --muted-foreground: 220 15% 50%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 65%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 20% 90%;
+    --input: 220 20% 94%;
+    --ring: 200 85% 70%;
+
+    /* App-specific design tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(200 85% 75%), hsl(280 45% 80%));
+    --gradient-success: linear-gradient(135deg, hsl(150 60% 75%), hsl(120 50% 70%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 25% 98%));
+    
+    --shadow-soft: 0 4px 20px -4px hsl(200 85% 70% / 0.25);
+    --shadow-card: 0 2px 12px -2px hsl(220 15% 25% / 0.1);
+    --shadow-floating: 0 8px 32px -8px hsl(200 85% 70% / 0.4);
+
+    --check-in-size: 120px;
 
     --radius: 0.5rem;
 
@@ -101,5 +118,39 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Custom component utilities for the check-in app */
+  .check-in-button {
+    @apply w-[var(--check-in-size)] h-[var(--check-in-size)] rounded-full 
+           bg-gradient-to-br from-primary to-accent text-primary-foreground
+           shadow-[var(--shadow-floating)] transition-all duration-300
+           hover:scale-105 active:scale-95 flex items-center justify-center
+           font-semibold text-lg;
+  }
+  
+  .contact-card {
+    @apply bg-gradient-to-br from-card to-muted/30 rounded-2xl p-4 
+           shadow-[var(--shadow-card)] border border-border/50
+           transition-all duration-200 hover:shadow-[var(--shadow-soft)];
+  }
+  
+  .status-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full
+           text-sm font-medium transition-colors;
+  }
+  
+  .status-ok {
+    @apply bg-secondary/20 text-secondary-foreground border border-secondary/30;
+  }
+  
+  .status-busy {
+    @apply bg-accent/20 text-accent-foreground border border-accent/30;
+  }
+  
+  .status-call {
+    @apply bg-primary/20 text-primary-foreground border border-primary/30;
   }
 }
