@@ -48,6 +48,12 @@ const Onboarding = () => {
     navigate("/");
   };
 
+  const handleTestSkip = () => {
+    // Skip onboarding for testing
+    localStorage.setItem("checkInUser", JSON.stringify({ name: "Test User", email: "test@example.com" }));
+    navigate("/");
+  };
+
   if (isRegistering) {
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
@@ -89,6 +95,14 @@ const Onboarding = () => {
               className="w-full rounded-xl h-12 text-base font-semibold"
             >
               Start met Check-in
+            </Button>
+            
+            <Button
+              onClick={handleTestSkip}
+              variant="ghost"
+              className="w-full text-sm text-muted-foreground"
+            >
+              🧪 Test - Skip naar Homepage
             </Button>
           </div>
         </Card>
@@ -153,10 +167,18 @@ const Onboarding = () => {
       <div className="px-6 pb-safe">
         <Button
           onClick={nextSlide}
-          className="w-full rounded-xl h-12 text-base font-semibold"
+          className="w-full rounded-xl h-12 text-base font-semibold mb-4"
         >
           {currentSlide === slides.length - 1 ? "Aan de slag" : "Volgende"}
           <ChevronRight className="ml-2" size={20} />
+        </Button>
+        
+        <Button
+          onClick={handleTestSkip}
+          variant="ghost"
+          className="w-full text-sm text-muted-foreground"
+        >
+          🧪 Test - Skip naar Homepage
         </Button>
       </div>
     </div>
