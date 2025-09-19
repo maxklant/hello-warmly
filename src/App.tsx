@@ -30,6 +30,17 @@ const App = () => {
       setHasCompletedOnboarding(localStorage.getItem("checkInUser") !== null);
     };
 
+    // Initialize dark mode on app load
+    const savedDarkMode = localStorage.getItem("darkMode");
+    if (savedDarkMode) {
+      const isDark = JSON.parse(savedDarkMode);
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+
     // Check immediately
     checkOnboardingStatus();
 
