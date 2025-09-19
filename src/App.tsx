@@ -55,6 +55,12 @@ const App = () => {
             <Route 
               path="/" 
               element={
+                hasCompletedOnboarding ? <Navigate to="/home" replace /> : <Navigate to="/onboarding" replace />
+              } 
+            />
+            <Route 
+              path="/home" 
+              element={
                 hasCompletedOnboarding ? <Home /> : <Navigate to="/onboarding" replace />
               } 
             />

@@ -49,7 +49,7 @@ const Onboarding = () => {
     // Trigger custom event to notify App component
     window.dispatchEvent(new Event('localStorageChange'));
     
-    navigate("/");
+    navigate("/home");
   };
 
   const handleTestSkip = () => {
@@ -59,7 +59,7 @@ const Onboarding = () => {
     // Trigger custom event to notify App component
     window.dispatchEvent(new Event('localStorageChange'));
     
-    navigate("/");
+    navigate("/home");
   };
 
   if (isRegistering) {

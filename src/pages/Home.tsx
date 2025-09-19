@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Clock, Check } from "lucide-react";
+import { Clock, Check, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 
 const statusOptions = [
@@ -21,6 +22,7 @@ const Home = () => {
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [lastCheckIn, setLastCheckIn] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const saved = localStorage.getItem("lastCheckIn");
@@ -28,6 +30,16 @@ const Home = () => {
       setLastCheckIn(saved);
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("checkInUser");
+    localStorage.removeItem("lastCheckIn");
+    
+    // Trigger custom event to notify App component
+    window.dispatchEvent(new Event('localStorageChange'));
+    
+    navigate("/onboarding");
+  };
 
   const handleCheckIn = () => {
     if (!isCheckedIn) {
@@ -55,9 +67,19 @@ const Home = () => {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="pt-12 pb-8 px-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          Hallo! 👋
-        </h1>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-2xl font-bold text-foreground">
+            Hallo! 👋
+          </h1>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleLogout}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <LogOut size={20} />
+          </Button>
+        </div>
         {lastCheckIn && (
           <div className="flex items-center gap-2 text-muted-foreground">
             <Clock size={16} />
