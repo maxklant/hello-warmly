@@ -45,12 +45,20 @@ const Onboarding = () => {
   const handleRegistration = () => {
     // Store user info and navigate to main app
     localStorage.setItem("checkInUser", JSON.stringify({ name, email }));
+    
+    // Trigger custom event to notify App component
+    window.dispatchEvent(new Event('localStorageChange'));
+    
     navigate("/");
   };
 
   const handleTestSkip = () => {
     // Skip onboarding for testing
     localStorage.setItem("checkInUser", JSON.stringify({ name: "Test User", email: "test@example.com" }));
+    
+    // Trigger custom event to notify App component
+    window.dispatchEvent(new Event('localStorageChange'));
+    
     navigate("/");
   };
 

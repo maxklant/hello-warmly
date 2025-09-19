@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
@@ -18,8 +19,31 @@ const queryClient = new QueryClient();
 const basename = import.meta.env.PROD ? '/hello-warmly' : '';
 
 const App = () => {
-  // Check if user has completed onboarding
-  const hasCompletedOnboarding = localStorage.getItem("checkInUser");
+  // Check if user has completed onboarding with reactive state
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(
+    () => localStorage.getItem("checkInUser") !== null
+  );
+
+  // Listen for localStorage changes
+  useEffect(() => {
+    const checkOnboardingStatus = () => {
+      setHasCompletedOnboarding(localStorage.getItem("checkInUser") !== null);
+    };
+
+    // Check immediately
+    checkOnboardingStatus();
+
+    // Listen for storage events (when localStorage changes)
+    window.addEventListener('storage', checkOnboardingStatus);
+    
+    // Custom event for same-tab localStorage changes
+    window.addEventListener('localStorageChange', checkOnboardingStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkOnboardingStatus);
+      window.removeEventListener('localStorageChange', checkOnboardingStatus);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
