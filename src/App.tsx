@@ -14,6 +14,9 @@ import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
+// Get the base path for React Router
+const basename = import.meta.env.PROD ? '/hello-warmly' : '';
+
 const App = () => {
   // Check if user has completed onboarding
   const hasCompletedOnboarding = localStorage.getItem("checkInUser");
@@ -23,7 +26,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
           <Routes>
             <Route 
               path="/" 
