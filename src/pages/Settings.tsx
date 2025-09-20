@@ -9,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { User, Shield, Bell, Palette, LogOut, Plus, Trash2, Filter, Moon, Sun, Phone, Share2, Copy, UserPlus, Mail, Edit, VolumeX, Volume2, MoreVertical } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   User as UserType, 
   Contact, 
@@ -33,12 +34,18 @@ const Settings = () => {
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [isInviteLinkOpen, setIsInviteLinkOpen] = useState(false);
   const [inviteLink, setInviteLink] = useState("");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
+  const { user: authUser, logout } = useAuth();
 
   useEffect(() => {
-    const savedUser = localStorage.getItem(STORAGE_KEYS.CHECK_IN_USER);
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    // Load authenticated user info
+    if (authUser) {
+      setUser({
+        name: authUser.name || authUser.email || '',
+        email: authUser.email || '',
+        phone: authUser.phone || ''
+      });
     }
 
     // Load saved contacts
@@ -60,7 +67,7 @@ const Settings = () => {
     if (savedFilter && (savedFilter === "all" || savedFilter === "today" || savedFilter === "week" || savedFilter === "month")) {
       setCheckInFilter(savedFilter as CheckInFilter);
     }
-  }, []);
+  }, [authUser]);
 
   const applyDarkMode = (isDark: boolean) => {
     if (isDark) {
@@ -233,10 +240,21 @@ const Settings = () => {
     return phone;
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(STORAGE_KEYS.CHECK_IN_USER);
-    localStorage.removeItem(STORAGE_KEYS.LAST_CHECK_IN);
-    navigate("/onboarding");
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      // localStorage cleanup is now handled by the auth service
+      navigate("/login");
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback - force logout even if API call fails
+      localStorage.removeItem(STORAGE_KEYS.CHECK_IN_USER);
+      localStorage.removeItem(STORAGE_KEYS.LAST_CHECK_IN);
+      navigate("/login");
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   return (
@@ -758,9 +776,10 @@ const Settings = () => {
             variant="destructive"
             onClick={handleLogout}
             className="w-full rounded-xl"
+            disabled={isLoggingOut}
           >
             <LogOut size={16} className="mr-2" />
-            Uitloggen
+            {isLoggingOut ? 'Uitloggen...' : 'Uitloggen'}
           </Button>
         </Card>
       </div>

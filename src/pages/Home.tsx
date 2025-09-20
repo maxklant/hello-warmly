@@ -9,6 +9,7 @@ import { Clock, Check, LogOut, Plus, User, Mail, Phone, Trash2, ChevronLeft, Che
 import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Navigation from "@/components/Navigation";
+import DatabaseTest from "@/components/DatabaseTest";
 import { 
   StatusOption, 
   EmotionOption, 
@@ -327,6 +328,12 @@ const Home = () => {
             <LogOut size={20} />
           </Button>
         </div>
+        
+        {/* Database Test Component - Remove this after testing */}
+        <div className="mb-4">
+          <DatabaseTest />
+        </div>
+        
         {lastCheckIn && (
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-muted-foreground">
