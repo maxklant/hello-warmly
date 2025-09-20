@@ -1,4 +1,8 @@
-# Welcome to your Lovable project
+# Check-in App - Hello Warmly
+
+Stay connected with family and friends through simple check-ins.
+
+**Live Demo**: https://maxklant.github.io/hello-warmly/
 
 ## Project info
 
