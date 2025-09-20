@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ChevronRight, Heart, Clock, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-image.jpg";
+import { STORAGE_KEYS } from "@/types";
 
 const slides = [
   {
@@ -44,7 +45,7 @@ const Onboarding = () => {
 
   const handleRegistration = () => {
     // Store user info and navigate to main app
-    localStorage.setItem("checkInUser", JSON.stringify({ name, email }));
+    localStorage.setItem(STORAGE_KEYS.CHECK_IN_USER, JSON.stringify({ name, email }));
     
     // Trigger custom event to notify App component
     window.dispatchEvent(new Event('localStorageChange'));
@@ -54,7 +55,7 @@ const Onboarding = () => {
 
   const handleTestSkip = () => {
     // Skip onboarding for testing
-    localStorage.setItem("checkInUser", JSON.stringify({ name: "Test User", email: "test@example.com" }));
+    localStorage.setItem(STORAGE_KEYS.CHECK_IN_USER, JSON.stringify({ name: "Test User", email: "test@example.com" }));
     
     // Trigger custom event to notify App component
     window.dispatchEvent(new Event('localStorageChange'));

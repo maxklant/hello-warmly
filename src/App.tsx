@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { STORAGE_KEYS } from "@/types";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Onboarding from "./pages/Onboarding";
@@ -12,6 +13,7 @@ import Timeline from "./pages/Timeline";
 import ContactDetail from "./pages/ContactDetail";
 import Reminders from "./pages/Reminders";
 import Settings from "./pages/Settings";
+import Chat from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
@@ -21,17 +23,17 @@ const basename = import.meta.env.PROD ? '/hello-warmly' : '';
 const App = () => {
   // Check if user has completed onboarding with reactive state
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(
-    () => localStorage.getItem("checkInUser") !== null
+    () => localStorage.getItem(STORAGE_KEYS.CHECK_IN_USER) !== null
   );
 
   // Listen for localStorage changes
   useEffect(() => {
     const checkOnboardingStatus = () => {
-      setHasCompletedOnboarding(localStorage.getItem("checkInUser") !== null);
+      setHasCompletedOnboarding(localStorage.getItem(STORAGE_KEYS.CHECK_IN_USER) !== null);
     };
 
     // Initialize dark mode on app load
-    const savedDarkMode = localStorage.getItem("darkMode");
+    const savedDarkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
     if (savedDarkMode) {
       const isDark = JSON.parse(savedDarkMode);
       if (isDark) {
@@ -78,6 +80,7 @@ const App = () => {
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/contact/:id" element={<ContactDetail />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="/reminders" element={<Reminders />} />
             <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

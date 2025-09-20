@@ -91,12 +91,22 @@ const ContactDetail = () => {
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center">
-            <Button className="rounded-xl flex-1 max-w-[140px]">
+            <Button 
+              className="rounded-xl flex-1 max-w-[140px]"
+              onClick={() => navigate(`/chat?contact=${id}`)}
+            >
               <MessageCircle size={16} className="mr-2" />
               Bericht
             </Button>
             
-            <Button variant="outline" className="rounded-xl flex-1 max-w-[140px]">
+            <Button 
+              variant="outline" 
+              className="rounded-xl flex-1 max-w-[140px]"
+              onClick={() => {
+                // Use tel: protocol for calling
+                window.open(`tel:+31612345678`, '_self');
+              }}
+            >
               <Phone size={16} className="mr-2" />
               Bellen
             </Button>
