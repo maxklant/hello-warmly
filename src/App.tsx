@@ -24,6 +24,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Chat from "./pages/Chat";
 import MoodPage from "./pages/MoodPage";
+import { Journal } from "./pages/Journal";
 
 const queryClient = new QueryClient();
 
@@ -130,6 +131,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <MoodPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/journal" 
+                element={
+                  <ProtectedRoute>
+                    <Journal />
                   </ProtectedRoute>
                 } 
               />

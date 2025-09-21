@@ -50,6 +50,99 @@ CREATE POLICY "Users can view visible mood logs" ON mood_log
   );
 
 -- ==========================================
+-- JOURNAL/DIARY SYSTEM
+-- ==========================================
+
+-- Journal entries for daily diary functionality
+CREATE TABLE IF NOT EXISTS journal_entries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  date DATE NOT NULL DEFAULT CURRENT_DATE,
+  title TEXT, -- Optional title for the entry
+  content TEXT NOT NULL CHECK (length(content) <= 1000), -- Max 1000 characters
+  mood_id UUID REFERENCES mood_log(id) ON DELETE SET NULL, -- Link to mood of the day
+  tags TEXT[], -- Array of tags like ['werk', 'familie', 'gezondheid']
+  media_urls TEXT[], -- Array of media URLs (photos, voice notes)
+  privacy_level TEXT DEFAULT 'private' CHECK (privacy_level IN ('private', 'shared_contacts', 'public')),
+  shared_with UUID[], -- Array of contact user_ids this entry is shared with
+  is_protected BOOLEAN DEFAULT false, -- Whether entry requires pincode
+  pincode_hash TEXT, -- Hashed pincode for protected entries
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, date) -- One journal entry per day per user
+);
+
+-- Enable RLS on journal_entries
+ALTER TABLE journal_entries ENABLE ROW LEVEL SECURITY;
+
+-- Users can manage their own journal entries
+CREATE POLICY "Users can manage own journal entries" ON journal_entries
+  FOR ALL USING (auth.uid() = user_id);
+
+-- Users can view journal entries based on privacy level and sharing
+CREATE POLICY "Users can view shared journal entries" ON journal_entries
+  FOR SELECT USING (
+    auth.uid() = user_id OR
+    privacy_level = 'public' OR
+    (privacy_level = 'shared_contacts' AND 
+     (auth.uid() = ANY(shared_with) OR 
+      EXISTS (
+        SELECT 1 FROM friendships 
+        WHERE (requester_id = auth.uid() AND receiver_id = user_id) 
+           OR (receiver_id = auth.uid() AND requester_id = user_id)
+        AND status = 'accepted'
+      )
+     )
+    )
+  );
+
+-- Index for fast date-based queries
+CREATE INDEX IF NOT EXISTS idx_journal_entries_user_date ON journal_entries(user_id, date DESC);
+
+-- Index for tag-based searches
+CREATE INDEX IF NOT EXISTS idx_journal_entries_tags ON journal_entries USING gin(tags);
+
+-- Function to automatically link journal entry with mood of the same day
+CREATE OR REPLACE FUNCTION link_journal_to_mood()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Try to find mood entry for the same user and date
+  UPDATE journal_entries 
+  SET mood_id = (
+    SELECT id FROM mood_log 
+    WHERE user_id = NEW.user_id AND date = NEW.date
+    LIMIT 1
+  )
+  WHERE id = NEW.id AND mood_id IS NULL;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to auto-link journal to mood
+CREATE TRIGGER trigger_link_journal_to_mood
+  AFTER INSERT ON journal_entries
+  FOR EACH ROW EXECUTE FUNCTION link_journal_to_mood();
+
+-- Function to automatically link mood to existing journal entry
+CREATE OR REPLACE FUNCTION link_mood_to_journal()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Try to find journal entry for the same user and date
+  UPDATE journal_entries 
+  SET mood_id = NEW.id
+  WHERE user_id = NEW.user_id AND date = NEW.date AND mood_id IS NULL;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to auto-link mood to journal
+CREATE TRIGGER trigger_link_mood_to_journal
+  AFTER INSERT ON mood_log
+  FOR EACH ROW EXECUTE FUNCTION link_mood_to_journal();
+
+-- ==========================================
 -- LOW EFFORT CONTACT SYSTEM
 -- ==========================================
 

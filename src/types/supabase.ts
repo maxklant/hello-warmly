@@ -480,6 +480,55 @@ export interface Database {
           is_active?: boolean
         }
       }
+      journal_entries: {
+        Row: {
+          id: string
+          user_id: string
+          date: string
+          title: string | null
+          content: string
+          mood_id: string | null
+          tags: string[] | null
+          media_urls: string[] | null
+          privacy_level: 'private' | 'shared_contacts' | 'public'
+          shared_with: string[] | null
+          is_protected: boolean
+          pincode_hash: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          date?: string
+          title?: string | null
+          content: string
+          mood_id?: string | null
+          tags?: string[] | null
+          media_urls?: string[] | null
+          privacy_level?: 'private' | 'shared_contacts' | 'public'
+          shared_with?: string[] | null
+          is_protected?: boolean
+          pincode_hash?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          date?: string
+          title?: string | null
+          content?: string
+          mood_id?: string | null
+          tags?: string[] | null
+          media_urls?: string[] | null
+          privacy_level?: 'private' | 'shared_contacts' | 'public'
+          shared_with?: string[] | null
+          is_protected?: boolean
+          pincode_hash?: string | null
+          updated_at?: string
+        }
+      }
         Row: {
           id: string
           user_id: string
@@ -623,7 +672,6 @@ export interface Database {
       [_ in never]: never
     }
   }
-}
 
 // Convenience types for use in components
 export type User = Database['public']['Tables']['users']['Row']
@@ -677,6 +725,10 @@ export type ChallengeUpdate = Database['public']['Tables']['challenges']['Update
 export type Collection = Database['public']['Tables']['collections']['Row']
 export type CollectionInsert = Database['public']['Tables']['collections']['Insert']
 export type CollectionUpdate = Database['public']['Tables']['collections']['Update']
+
+export type JournalEntry = Database['public']['Tables']['journal_entries']['Row']
+export type JournalEntryInsert = Database['public']['Tables']['journal_entries']['Insert']
+export type JournalEntryUpdate = Database['public']['Tables']['journal_entries']['Update']
 
 // Extended types that include joined data
 export interface FriendshipWithUsers extends Friendship {
