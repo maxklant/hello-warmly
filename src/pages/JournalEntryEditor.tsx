@@ -115,7 +115,7 @@ export function JournalEntryEditor({ entry, onSave, onCancel }: JournalEntryEdit
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove))
   }
-
+  
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
