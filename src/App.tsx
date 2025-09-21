@@ -22,6 +22,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
+import Chat from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
@@ -112,6 +113,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <ContactDetail />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/chat" 
+                element={
+                  <ProtectedRoute>
+                    <Chat />
                   </ProtectedRoute>
                 } 
               />

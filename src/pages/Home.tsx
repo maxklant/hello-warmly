@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Navigation from "@/components/Navigation";
 import DatabaseTest from "@/components/DatabaseTest";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   StatusOption, 
   EmotionOption, 
@@ -64,6 +65,7 @@ const Home = () => {
   const [checkInVisibility, setCheckInVisibility] = useState<PrivacyLevel>("contacts");
   
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   // Utility function to check if a contact is currently muted
   const isContactMuted = (contact: Contact): boolean => {
@@ -105,14 +107,15 @@ const Home = () => {
     return saved ? JSON.parse(saved) : null;
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(STORAGE_KEYS.CHECK_IN_USER);
-    localStorage.removeItem(STORAGE_KEYS.LAST_CHECK_IN);
-    
-    // Trigger custom event to notify App component
-    window.dispatchEvent(new Event('localStorageChange'));
-    
-    navigate("/onboarding");
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Navigation will be handled by the AuthProvider/ProtectedRoute
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Fallback navigation in case of error
+      navigate("/login");
+    }
   };
 
   const handleAddContact = () => {

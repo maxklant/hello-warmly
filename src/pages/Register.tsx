@@ -96,7 +96,7 @@ const Register = () => {
       )
       
       if (success) {
-        navigate('/onboarding')
+        navigate('/home')
       }
     } catch (err) {
       console.error('Registration error:', err)

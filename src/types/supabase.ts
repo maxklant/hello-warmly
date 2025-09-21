@@ -9,7 +9,12 @@ export interface Database {
           id: string
           email: string
           name: string
+          username: string | null
           phone: string | null
+          invite_code: string
+          bio: string | null
+          avatar_url: string | null
+          is_public: boolean
           created_at: string
           updated_at: string
         }
@@ -17,7 +22,12 @@ export interface Database {
           id?: string
           email: string
           name: string
+          username?: string | null
           phone?: string | null
+          invite_code?: string
+          bio?: string | null
+          avatar_url?: string | null
+          is_public?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -25,7 +35,37 @@ export interface Database {
           id?: string
           email?: string
           name?: string
+          username?: string | null
           phone?: string | null
+          invite_code?: string
+          bio?: string | null
+          avatar_url?: string | null
+          is_public?: boolean
+          updated_at?: string
+        }
+      }
+      friendships: {
+        Row: {
+          id: string
+          requester_id: string
+          receiver_id: string
+          status: 'pending' | 'accepted' | 'declined' | 'blocked'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          requester_id: string
+          receiver_id: string
+          status?: 'pending' | 'accepted' | 'declined' | 'blocked'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          requester_id?: string
+          receiver_id?: string
+          status?: 'pending' | 'accepted' | 'declined' | 'blocked'
           updated_at?: string
         }
       }
@@ -97,8 +137,10 @@ export interface Database {
           sender_id: string
           receiver_id: string
           message: string
-          type: string
+          type: 'text' | 'check-in-reaction' | 'image' | 'system'
           check_in_id: string | null
+          is_read: boolean
+          edited_at: string | null
           created_at: string
         }
         Insert: {
@@ -106,8 +148,10 @@ export interface Database {
           sender_id: string
           receiver_id: string
           message: string
-          type?: string
+          type?: 'text' | 'check-in-reaction' | 'image' | 'system'
           check_in_id?: string | null
+          is_read?: boolean
+          edited_at?: string | null
           created_at?: string
         }
         Update: {
@@ -115,8 +159,10 @@ export interface Database {
           sender_id?: string
           receiver_id?: string
           message?: string
-          type?: string
+          type?: 'text' | 'check-in-reaction' | 'image' | 'system'
           check_in_id?: string | null
+          is_read?: boolean
+          edited_at?: string | null
         }
       }
     }
@@ -137,6 +183,10 @@ export type User = Database['public']['Tables']['users']['Row']
 export type UserInsert = Database['public']['Tables']['users']['Insert']
 export type UserUpdate = Database['public']['Tables']['users']['Update']
 
+export type Friendship = Database['public']['Tables']['friendships']['Row']
+export type FriendshipInsert = Database['public']['Tables']['friendships']['Insert']
+export type FriendshipUpdate = Database['public']['Tables']['friendships']['Update']
+
 export type Contact = Database['public']['Tables']['contacts']['Row']
 export type ContactInsert = Database['public']['Tables']['contacts']['Insert']
 export type ContactUpdate = Database['public']['Tables']['contacts']['Update']
@@ -152,6 +202,11 @@ export type MessageUpdate = Database['public']['Tables']['messages']['Update']
 // Extended types that include joined data
 export interface ContactWithUser extends Contact {
   contact_user: User
+}
+
+export interface FriendshipWithUsers extends Friendship {
+  requester: User
+  receiver: User
 }
 
 export interface MessageWithSender extends Message {
