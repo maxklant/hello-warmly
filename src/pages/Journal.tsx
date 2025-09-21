@@ -127,27 +127,27 @@ export function Journal() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <div className="container mx-auto p-6 space-y-6">
+      <div className="container mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6 max-w-6xl">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-bold flex items-center gap-3 text-slate-800 dark:text-slate-200">
+          <h1 className="text-2xl sm:text-3xl font-serif font-bold flex items-center gap-2 sm:gap-3 text-slate-800 dark:text-slate-200">
             📚 Mijn Dagboek
           </h1>
-          <p className="text-slate-700 dark:text-slate-300 font-serif italic">
+          <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 font-serif italic">
             {todaysEntry 
               ? "✅ Je hebt vandaag al een prachtig verhaal geschreven!"
               : "✍️ Deel je gedachten en herinneringen van vandaag"
             }
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={exportJournal} variant="outline" size="sm" className="font-serif">
-            <ExternalLink className="h-4 w-4 mr-2" />
+        <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
+          <Button onClick={exportJournal} variant="outline" size="sm" className="font-serif text-xs sm:text-sm">
+            <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
             📤 Exporteren
           </Button>
-          <Button onClick={handleNewEntry} className="font-serif bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-            <Plus className="h-4 w-4 mr-2" />
+          <Button onClick={handleNewEntry} className="font-serif bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-xs sm:text-sm">
+            <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
             📖 Nieuw Verhaal
           </Button>
         </div>
@@ -174,25 +174,25 @@ export function Journal() {
 
       {/* Search and Filter */}
       <Card className="bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-900/20 dark:to-blue-900/20 border-slate-200 dark:border-slate-800">
-        <CardContent className="pt-6">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1">
+        <CardContent className="pt-4 sm:pt-6">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <div className="w-full">
               <div className="relative">
-                <Search className="h-4 w-4 absolute left-3 top-3 text-indigo-600 dark:text-indigo-400" />
+                <Search className="h-3 w-3 sm:h-4 sm:w-4 absolute left-3 top-3 text-indigo-600 dark:text-indigo-400" />
                 <Input
                   placeholder="🔍 Zoek in je dagboek verhalen..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 font-serif bg-white dark:bg-slate-900/30 border-slate-300 dark:border-slate-700"
+                  className="pl-8 sm:pl-9 font-serif bg-white dark:bg-slate-900/30 border-slate-300 dark:border-slate-700 text-sm sm:text-base"
                 />
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1 sm:gap-2 max-h-24 overflow-y-auto">
               {availableTags.map((tag) => (
                 <Badge
                   key={tag}
                   variant={selectedTags.includes(tag) ? "default" : "secondary"}
-                  className={`cursor-pointer font-serif transition-all duration-200 hover:scale-105 ${
+                  className={`cursor-pointer font-serif transition-all duration-200 hover:scale-105 text-xs ${
                     selectedTags.includes(tag) 
                       ? "bg-indigo-600 text-white" 
                       : "bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
@@ -209,13 +209,22 @@ export function Journal() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-900/30 border border-slate-300 dark:border-slate-700">
-          <TabsTrigger value="list" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800">📄 Verhalen</TabsTrigger>
-          <TabsTrigger value="calendar" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800">📅 Kalender</TabsTrigger>
-          <TabsTrigger value="stats" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800">📊 Statistieken</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-900/30 border border-slate-300 dark:border-slate-700 h-auto">
+          <TabsTrigger value="list" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800 text-xs sm:text-sm px-2 sm:px-4 py-2">
+            <span className="hidden sm:inline">📄 Verhalen</span>
+            <span className="sm:hidden">📄</span>
+          </TabsTrigger>
+          <TabsTrigger value="calendar" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800 text-xs sm:text-sm px-2 sm:px-4 py-2">
+            <span className="hidden sm:inline">📅 Kalender</span>
+            <span className="sm:hidden">📅</span>
+          </TabsTrigger>
+          <TabsTrigger value="stats" className="font-serif data-[state=active]:bg-slate-200 dark:data-[state=active]:bg-slate-800 text-xs sm:text-sm px-2 sm:px-4 py-2">
+            <span className="hidden sm:inline">📊 Statistieken</span>
+            <span className="sm:hidden">📊</span>
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="list" className="space-y-4">
+        <TabsContent value="list" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
           {entries.length === 0 ? (
             <Card className="bg-gradient-to-br from-slate-50 to-blue-100 dark:from-slate-900/20 dark:to-blue-900/20 border-slate-200 dark:border-slate-800">
               <CardContent className="pt-6">
@@ -281,16 +290,16 @@ export function Journal() {
 
       {/* Journal Entry Editor Dialog */}
       <Dialog open={isEditorOpen} onOpenChange={setIsEditorOpen}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-100 dark:from-slate-900/20 dark:to-blue-900/20 border-2 border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-500">
-          {/* Book spine effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-b from-slate-800 to-slate-900 shadow-inner"></div>
-          <div className="absolute left-6 top-0 bottom-0 w-1 bg-indigo-600"></div>
+        <DialogContent className="w-[95vw] max-w-5xl h-[90vh] sm:max-h-[95vh] overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-100 dark:from-slate-900/20 dark:to-blue-900/20 border-2 border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in-0 zoom-in-95 duration-500 p-3 sm:p-6">
+          {/* Book spine effect - hidden on mobile */}
+          <div className="absolute left-0 top-0 bottom-0 w-3 sm:w-6 bg-gradient-to-b from-slate-800 to-slate-900 shadow-inner"></div>
+          <div className="absolute left-3 sm:left-6 top-0 bottom-0 w-1 bg-indigo-600"></div>
           
-          <DialogHeader className="relative z-10 text-center border-b-2 border-dashed border-slate-300 dark:border-slate-700 pb-4 ml-8">
-            <DialogTitle className="font-serif text-2xl text-slate-800 dark:text-slate-200 flex items-center justify-center gap-2">
+          <DialogHeader className="relative z-10 text-center border-b-2 border-dashed border-slate-300 dark:border-slate-700 pb-3 sm:pb-4 ml-4 sm:ml-8">
+            <DialogTitle className="font-serif text-lg sm:text-2xl text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1 sm:gap-2">
               {editingEntry ? '📝 Bewerk je verhaal' : '📖 Nieuw Dagboek Verhaal'}
             </DialogTitle>
-            <DialogDescription className="font-serif text-slate-700 dark:text-slate-300">
+            <DialogDescription className="font-serif text-slate-700 dark:text-slate-300 text-sm sm:text-base">
               {editingEntry 
                 ? `Verander je verhaal van ${editingEntry.date}`
                 : 'Vertel je verhaal van vandaag aan je dagboek'

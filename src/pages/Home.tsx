@@ -318,36 +318,36 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="pt-12 pb-8 px-6">
+      <div className="pt-8 sm:pt-12 pb-6 sm:pb-8 px-3 sm:px-6">
         <div className="flex items-center justify-between mb-2">
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">
             Hallo! 👋
           </h1>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleLogout}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground p-2"
           >
-            <LogOut size={20} />
+            <LogOut size={18} className="sm:w-5 sm:h-5" />
           </Button>
         </div>
         
         {/* Database Test Component - Remove this after testing */}
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <DatabaseTest />
         </div>
         
         {lastCheckIn && (
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock size={16} />
-              <span className="text-sm">Laatste check-in: {lastCheckIn}</span>
+              <Clock size={14} className="sm:w-4 sm:h-4 flex-shrink-0" />
+              <span className="text-xs sm:text-sm">Laatste check-in: {lastCheckIn}</span>
             </div>
             {(() => {
               const checkInData = getLastCheckInData();
               return checkInData && (
-                <div className="bg-muted/30 p-3 rounded-xl">
+                <div className="bg-muted/30 p-2 sm:p-3 rounded-xl text-sm">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-lg">
                       {checkInData.mood <= 3 ? "😔" : checkInData.mood <= 6 ? "😐" : checkInData.mood <= 8 ? "🙂" : "😄"}

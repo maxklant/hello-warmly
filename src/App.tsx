@@ -29,7 +29,7 @@ import { Journal } from "./pages/Journal";
 const queryClient = new QueryClient();
 
 // Get the base path for React Router
-const basename = import.meta.env.PROD ? '/hello-warmly' : '';
+const basename = import.meta.env.MODE === 'production' ? '/hello-warmly' : '';
 
 const App = () => {
   // Initialize dark mode on app load
