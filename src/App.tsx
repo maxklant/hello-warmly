@@ -23,6 +23,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import Chat from "./pages/Chat";
+import MoodPage from "./pages/MoodPage";
 
 const queryClient = new QueryClient();
 
@@ -121,6 +122,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Chat />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/mood" 
+                element={
+                  <ProtectedRoute>
+                    <MoodPage />
                   </ProtectedRoute>
                 } 
               />

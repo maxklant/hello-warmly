@@ -1,12 +1,12 @@
-import { Home, Users, Settings, Bell, MessageCircle } from "lucide-react";
+import { Home, Users, Settings, Bell, MessageCircle, Heart } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
   const navItems = [
     { to: "/home", icon: Home, label: "Home" },
     { to: "/timeline", icon: Users, label: "Friends" },
+    { to: "/mood", icon: Heart, label: "Mood" },
     { to: "/chat", icon: MessageCircle, label: "Chat" },
-    { to: "/reminders", icon: Bell, label: "Herinneringen" },
     { to: "/settings", icon: Settings, label: "Instellingen" },
   ];
 

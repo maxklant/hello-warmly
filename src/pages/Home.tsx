@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Navigation from "@/components/Navigation";
 import DatabaseTest from "@/components/DatabaseTest";
+import { MoodSelector } from "@/components/MoodSelector";
 import { useAuth } from "@/hooks/useAuth";
 import { 
   StatusOption, 
@@ -648,6 +649,17 @@ const Home = () => {
             </div>
           </Card>
         )}
+      </div>
+
+      {/* Mood Tracking Section */}
+      <div className="px-6 mb-8">
+        <MoodSelector 
+          compact={true} 
+          onMoodLogged={(mood) => {
+            // You could add a toast notification here or update state
+            console.log('Mood logged:', mood)
+          }} 
+        />
       </div>
 
       {/* Recent Contacts */}
